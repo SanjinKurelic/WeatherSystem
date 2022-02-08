@@ -1,12 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
-	<flow name="weathersystemesbFlow" doc:id="6409a3c0-c09f-4b7e-892f-d93a6591a879" >
-		<http:listener doc:name="Listener" doc:id="1859b20d-f048-46ec-af22-039282044a5a" />
-		<logger level="INFO" doc:name="Logger" doc:id="d4f37f75-5946-4ae4-a244-cca9ca4e2c8a" />
-		<http:request method="GET" doc:name="Request" doc:id="9f29ecb7-3d60-4ce8-a4cc-453d39971902" />
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="Mule_Enpoint" doc:name="HTTP Listener config" doc:id="488d0ac4-db32-4076-a73e-c668db225cfe">
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="WS_REST_API" doc:name="HTTP Request configuration" doc:id="ea48e892-5e0d-49ba-9434-18e161f4c10f">
+		<http:request-connection host="localhost" port="8085" />
+	</http:request-config>
+	<file:config name="Log_File" doc:name="File Config" doc:id="304a939d-73f6-45db-9e91-a8180f29ba8c" />
+	<flow name="Station_API" doc:id="6409a3c0-c09f-4b7e-892f-d93a6591a879" >
+		<http:listener doc:name="Listener" doc:id="1859b20d-f048-46ec-af22-039282044a5a" config-ref="Mule_Enpoint" path="/station/*"/>
+		<choice doc:name="HTTP method" doc:id="8b2cd3b6-c753-41b1-becf-6f399efe596d" >
+			<when expression="#['GET' == attributes.method]">
+				<choice doc:name="HTTP method" doc:id="c4adba16-c28f-4ced-8488-30bd3c65f386" >
+					<when expression="#[attributes.maskedRequestPath != '/']">
+						<http:request method="GET" doc:name="Get station" doc:id="e26cdf16-f6fd-4a9e-98f4-ed645cd65fde" config-ref="WS_REST_API" path="#['/station' ++ attributes.maskedRequestPath]"/>
+						<ee:transform doc:name="Remove link references" doc:id="4d6c0641-861e-41bf-9079-2209de0e7381" >
+							<ee:message >
+								<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+{
+    "name": payload.name,
+    "model": payload.model,
+    "modelVersion": payload.modelVersion,
+    "postalCode": payload.postalCode,
+    "city": payload.city,
+}]]></ee:set-payload>
+							</ee:message>
+						</ee:transform>
+					</when>
+					<otherwise>
+						<http:request method="GET" doc:name="Get all stations" doc:id="addb4c6b-2fb4-46f9-81c8-9acbe12ad938" config-ref="WS_REST_API" path="/station"/>
+						<ee:transform doc:name="Remove link references" doc:id="0cec1467-9452-4fc6-82eb-5dde2aa05fec" >
+							<ee:message >
+								<ee:set-payload ><![CDATA[%dw 2.0
+import * from dw::core::Strings
+output application/json
+---
+payload.content map ({
+	"id": substringAfter($.links[0].href, 'station/'),
+    "name": $.name,
+    "model": $.model,
+    "modelVersion": $.modelVersion,
+    "postalCode": $.postalCode,
+    "city": $.city,
+})]]></ee:set-payload>
+							</ee:message>
+						</ee:transform>
+					</otherwise>
+				</choice>
+			</when>
+			<when expression="#['POST' == attributes.method]">
+				<http:request method="POST" doc:name="Add station" doc:id="b025aa19-f5a6-4f86-95aa-7ba0bcceaa9e" config-ref="WS_REST_API" path="/station"/>
+				<ee:transform doc:name="Remove link references" doc:id="84065382-e585-4a50-a6da-f80afc73bf64" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+import * from dw::core::Strings
+output application/json
+---
+{
+	"id": substringAfter(payload.links[0].href, 'station/'),
+    "name": payload.name,
+    "model": payload.model,
+    "modelVersion": payload.modelVersion,
+    "postalCode": payload.postalCode,
+    "city": payload.city,
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#['PUT' == attributes.method]">
+				<http:request method="PUT" doc:name="Edit station" doc:id="60afa651-5cbd-41e6-bee1-482ac32896ff" config-ref="WS_REST_API" path="#['/station' ++ attributes.maskedRequestPath]"/>
+				<ee:transform doc:name="Remove link references" doc:id="5a19a9c1-e370-4edf-9d2b-7bde90e5671c" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+    "name": payload.name,
+    "model": payload.model,
+    "modelVersion": payload.modelVersion,
+    "postalCode": payload.postalCode,
+    "city": payload.city,
+}]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+			</when>
+			<when expression="#['DELETE' == attributes.method]">
+				<http:request method="DELETE" doc:name="Delete station" doc:id="840c93ae-3f52-40c0-be7e-666b78a58d74" config-ref="WS_REST_API" path="#['/station' ++ attributes.maskedRequestPath]"/>
+			</when>
+		</choice>
+		<flow-ref doc:name="Log response" doc:id="31be7f79-92a6-4274-b1b1-3542c46e83cd" name="API_logger"/>
 	</flow>
+	<sub-flow name="API_logger" doc:id="b54b15e0-b830-4ce5-bccf-55ee98c0d100" >
+		<file:write doc:name="Log to file" doc:id="08cfae82-5668-4174-819c-7007ca3f4f88" config-ref="Log_File" path="C:\Users\skurelic\Projects\Ostalo\WeatherSystem\WeatherSystemESB\log.txt" mode="APPEND">
+			<file:content>#[payload]</file:content>
+		</file:write>
+		<ee:transform doc:name="Set as JSON" doc:id="a69a7e3e-f44f-4550-921e-3e3eaca56c7c" >
+					<ee:message >
+						<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+					</ee:message>
+				</ee:transform>
+	</sub-flow>
 </mule>
