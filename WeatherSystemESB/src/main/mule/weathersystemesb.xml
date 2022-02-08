@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd">
+	<flow name="weathersystemesbFlow" doc:id="6409a3c0-c09f-4b7e-892f-d93a6591a879" >
+		<http:listener doc:name="Listener" doc:id="1859b20d-f048-46ec-af22-039282044a5a" />
+		<logger level="INFO" doc:name="Logger" doc:id="d4f37f75-5946-4ae4-a244-cca9ca4e2c8a" />
+		<http:request method="GET" doc:name="Request" doc:id="9f29ecb7-3d60-4ce8-a4cc-453d39971902" />
+	</flow>
+</mule>
