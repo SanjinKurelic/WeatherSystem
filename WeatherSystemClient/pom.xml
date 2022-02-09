@@ -62,7 +62,7 @@
             <id>default-cli</id>
             <configuration>
               <mainClass>
-                eu.sanjin.kurelic.ws.client.weathersystemclient/eu.sanjin.kurelic.ws.client.weathersystemclient.HelloApplication
+                eu.sanjin.kurelic.ws.client./eu.sanjin.kurelic.ws.client.WeatherSystemApplication
               </mainClass>
               <launcher>app</launcher>
               <jlinkZipName>app</jlinkZipName>
