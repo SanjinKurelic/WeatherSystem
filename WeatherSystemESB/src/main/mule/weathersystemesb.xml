@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:file="http://www.mulesoft.org/schema/mule/file"
-	xmlns:http="http://www.mulesoft.org/schema/mule/http"
-	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:file="http://www.mulesoft.org/schema/mule/file"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
-http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd">
 	<http:listener-config name="Mule_Enpoint" doc:name="HTTP Listener config" doc:id="488d0ac4-db32-4076-a73e-c668db225cfe">
 		<http:listener-connection host="0.0.0.0" port="8081" />
 	</http:listener-config>
@@ -13,6 +14,24 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<http:request-connection host="localhost" port="8085" />
 	</http:request-config>
 	<file:config name="Log_File" doc:name="File Config" doc:id="304a939d-73f6-45db-9e91-a8180f29ba8c" />
+	<jms:config name="Active_MQ_Config" doc:name="JMS Config" doc:id="3486da77-80a6-4342-b1a1-343b34c2001c" >
+		<jms:active-mq-connection >
+			<jms:factory-configuration brokerUrl="tcp://localhost:61616" />
+		</jms:active-mq-connection>
+	</jms:config>
+	<flow name="Weather_report_MQ" doc:id="ef878625-5b61-4b5a-a2a3-7ff049444399" >
+		<jms:listener doc:name="On weather report" doc:id="47a3f95f-8a76-43ae-9340-01cdf945cde9" config-ref="Active_MQ_Config" destination="weather_report"/>
+		<ee:transform doc:name="Add new line to log" doc:id="897c702a-1764-4f91-9cde-4404204c7c74" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output text/plain
+---
+payload ++ '\n'
+]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<flow-ref doc:name="Flow Reference" doc:id="9e9240d8-d849-4d64-9bb0-401d4cf60c9d" name="API_logger"/>
+	</flow>
 	<flow name="Station_API" doc:id="6409a3c0-c09f-4b7e-892f-d93a6591a879" >
 		<http:listener doc:name="Listener" doc:id="1859b20d-f048-46ec-af22-039282044a5a" config-ref="Mule_Enpoint" path="/station/*"/>
 		<choice doc:name="HTTP method" doc:id="8b2cd3b6-c753-41b1-becf-6f399efe596d" >
