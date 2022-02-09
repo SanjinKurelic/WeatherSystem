@@ -1,7 +1,10 @@
-module eu.sanjin.kurelic.ws.client.weathersystemclient {
+open module eu.sanjin.kurelic.ws.client.weathersystemclient {
     requires javafx.controls;
     requires javafx.fxml;
+    requires spring.web;
+    requires org.slf4j;
+    requires java.sql;
+    requires lombok;
 
-    opens eu.sanjin.kurelic.ws.client to javafx.fxml;
     exports eu.sanjin.kurelic.ws.client;
 }

@@ -1,113 +1,166 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="eu.sanjin.kurelic.ws.client.WeatherSystemController">
-   <top>
-      <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #4FC3F7; -fx-max-height: 60;" BorderPane.alignment="CENTER">
-         <children>
-            <Label style="-fx-label-padding: 13;" text="Weather System">
-               <font>
-                  <Font size="22.0" />
-               </font>
-            </Label>
-           <Button fx:id="addNewButton" maxWidth="80.0" minWidth="80.0" mnemonicParsing="false" onAction="#onAddNewClick" prefWidth="80.0" text="Add new">
-               <HBox.margin>
-                  <Insets left="500.0" top="18.0" />
-               </HBox.margin></Button>
-         </children>
-      </HBox>
-   </top>
-   <center>
-      <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <content>
-            <TableView fx:id="stationGrid" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="485.0" minWidth="-Infinity" prefWidth="518.0">
-              <columns>
-                <TableColumn prefWidth="40.0" text="Id" />
-                <TableColumn prefWidth="75.0" text="Name" />
-                <TableColumn prefWidth="75.0" text="Model" />
-                <TableColumn prefWidth="105.0" text="Model version" />
-                <TableColumn prefWidth="75.0" text="City" />
-                <TableColumn prefWidth="100.0" text="Postal code" />
-              </columns>
-            </TableView>
-         </content>
-      </ScrollPane>
-   </center>
-   <right>
-      <GridPane maxWidth="280.0" minWidth="200.0" prefHeight="540.0" prefWidth="240.0" BorderPane.alignment="CENTER">
-        <columnConstraints>
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
-        </columnConstraints>
-        <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER" />
-          <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER" />
-          <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER" />
-          <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER" />
-          <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER" />
-          <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER" />
-          <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER" />
-          <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER" />
-          <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER" />
-          <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER" />
-          <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="NEVER" />
-            <RowConstraints />
-        </rowConstraints>
-         <children>
-            <Label text="Name:" />
-            <TextField fx:id="nameField" GridPane.columnSpan="2" GridPane.rowIndex="1" editable="false" />
-            <Label text="Model:" GridPane.columnSpan="2" GridPane.rowIndex="2" />
-            <TextField fx:id="modelField" GridPane.columnSpan="2" GridPane.rowIndex="3" editable="false" />
-           <Label text="Model version:" GridPane.columnSpan="2" GridPane.rowIndex="4" />
-           <TextField fx:id="versionField" GridPane.columnSpan="2" GridPane.rowIndex="5" editable="false" />
-           <Label text="City:" GridPane.columnSpan="2" GridPane.rowIndex="6" />
-           <TextField fx:id="cityField" GridPane.columnSpan="2" GridPane.rowIndex="7" editable="false" />
-           <Label text="Postal code:" GridPane.columnSpan="2" GridPane.rowIndex="8" />
-           <TextField fx:id="postalField" GridPane.columnSpan="2" GridPane.rowIndex="9" editable="false" />
-           <Button fx:id="cancelButton" maxWidth="80.0" minWidth="80.0" mnemonicParsing="false" onAction="#onCancelClick" prefWidth="80.0" text="Cancel" visible="false" GridPane.rowIndex="10">
-               <GridPane.margin>
-                  <Insets left="20.0" />
-               </GridPane.margin></Button>
-           <Button fx:id="saveButton" maxWidth="80.0" minWidth="80.0" mnemonicParsing="false" onAction="#onSaveClick" prefWidth="80.0" text="Save" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="10">
-               <GridPane.margin>
-                  <Insets left="20.0" />
-               </GridPane.margin></Button>
-           <Button fx:id="editButton" maxWidth="80.0" minWidth="80.0" mnemonicParsing="false" onAction="#onEditClick" prefWidth="80.0" text="Edit" GridPane.columnIndex="1" GridPane.rowIndex="10">
-             <GridPane.margin>
-               <Insets left="20.0" />
-             </GridPane.margin></Button>
-         </children>
-         <BorderPane.margin>
-            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-         </BorderPane.margin>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-      </GridPane>
-   </right>
-   <bottom>
-      <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-        <buttons>
-            <Label prefWidth="500.0" text="Refreshed at: 01.01.2022. 15:45:00">
-               <opaqueInsets>
-                  <Insets left="2000.0" />
-               </opaqueInsets>
-               <font>
-                  <Font size="10.0" />
-               </font>
-            </Label>
-          <Button fx:id="refreshButton" maxWidth="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#onRefreshClick" prefWidth="50.0" text="Refresh" />
-        </buttons>
-         <opaqueInsets>
-            <Insets />
-         </opaqueInsets>
-         <BorderPane.margin>
-            <Insets right="290.0" />
-         </BorderPane.margin>
-      </ButtonBar>
-   </bottom>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ButtonBar?>
+<?import javafx.scene.control.cell.PropertyValueFactory?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.text.Font?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+            prefWidth="800.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="eu.sanjin.kurelic.ws.client.WeatherSystemController">
+  <top>
+    <HBox prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: #4FC3F7; -fx-max-height: 60;"
+          BorderPane.alignment="CENTER">
+      <children>
+        <Label style="-fx-label-padding: 13;" text="Weather System">
+          <font>
+            <Font size="22.0"/>
+          </font>
+        </Label>
+        <Button fx:id="addNewButton" maxWidth="80.0" minWidth="80.0" mnemonicParsing="false" onAction="#onAddNewClick"
+                prefWidth="80.0" text="Add new">
+          <HBox.margin>
+            <Insets left="500.0" top="18.0"/>
+          </HBox.margin>
+        </Button>
+      </children>
+    </HBox>
+  </top>
+  <center>
+    <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <content>
+        <TableView fx:id="stationGrid" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                   minHeight="485.0" minWidth="-Infinity" prefWidth="518.0">
+          <columns>
+            <TableColumn prefWidth="40.0" text="Id">
+              <cellValueFactory>
+                <PropertyValueFactory property="id"/>
+              </cellValueFactory>
+            </TableColumn>
+            <TableColumn prefWidth="120.0" text="Name">
+              <cellValueFactory>
+                <PropertyValueFactory property="name"/>
+              </cellValueFactory>
+            </TableColumn>
+            <TableColumn prefWidth="120.0" text="Model">
+              <cellValueFactory>
+                <PropertyValueFactory property="model"/>
+              </cellValueFactory>
+            </TableColumn>
+            <TableColumn prefWidth="75.0" text="Version">
+              <cellValueFactory>
+                <PropertyValueFactory property="modelVersion"/>
+              </cellValueFactory>
+            </TableColumn>
+            <TableColumn prefWidth="75.0" text="City">
+              <cellValueFactory>
+                <PropertyValueFactory property="city"/>
+              </cellValueFactory>
+            </TableColumn>
+            <TableColumn prefWidth="80.0" text="Postal Code">
+              <cellValueFactory>
+                <PropertyValueFactory property="postalCode"/>
+              </cellValueFactory>
+            </TableColumn>
+          </columns>
+        </TableView>
+      </content>
+    </ScrollPane>
+  </center>
+  <right>
+    <GridPane maxWidth="280.0" minWidth="200.0" prefHeight="540.0" prefWidth="240.0" BorderPane.alignment="CENTER">
+      <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+      </columnConstraints>
+      <rowConstraints>
+        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER"/>
+        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER"/>
+        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER"/>
+        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER"/>
+        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER"/>
+        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER"/>
+        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER"/>
+        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER"/>
+        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER"/>
+        <RowConstraints minHeight="10.0" prefHeight="40.0" vgrow="NEVER"/>
+        <RowConstraints minHeight="10.0" prefHeight="80.0" vgrow="NEVER"/>
+        <RowConstraints/>
+      </rowConstraints>
+      <children>
+        <Label text="Name:"/>
+        <TextField fx:id="nameField" GridPane.columnSpan="3" GridPane.rowIndex="1" editable="false"/>
+        <Label text="Model:" GridPane.columnSpan="3" GridPane.rowIndex="2"/>
+        <TextField fx:id="modelField" GridPane.columnSpan="3" GridPane.rowIndex="3" editable="false"/>
+        <Label text="Model version:" GridPane.columnSpan="3" GridPane.rowIndex="4"/>
+        <TextField fx:id="versionField" GridPane.columnSpan="3" GridPane.rowIndex="5" editable="false"/>
+        <Label text="City:" GridPane.columnSpan="3" GridPane.rowIndex="6"/>
+        <TextField fx:id="cityField" GridPane.columnSpan="3" GridPane.rowIndex="7" editable="false"/>
+        <Label text="Postal code:" GridPane.columnSpan="3" GridPane.rowIndex="8"/>
+        <TextField fx:id="postalField" GridPane.columnSpan="3" GridPane.rowIndex="9" editable="false"/>
+        <Button fx:id="cancelButton" maxWidth="80.0" minWidth="80.0" mnemonicParsing="false" onAction="#onCancelClick"
+                prefWidth="80.0" text="Cancel" visible="false" GridPane.rowIndex="10">
+          <GridPane.margin>
+            <Insets left="20.0"/>
+          </GridPane.margin>
+        </Button>
+        <Button fx:id="deleteButton" maxWidth="80.0" minWidth="80.0" mnemonicParsing="false" onAction="#onDeleteClick"
+                prefWidth="80.0" text="Delete" GridPane.rowIndex="10">
+          <GridPane.margin>
+            <Insets left="20.0"/>
+          </GridPane.margin>
+        </Button>
+        <Button fx:id="saveButton" maxWidth="80.0" minWidth="80.0" mnemonicParsing="false" onAction="#onSaveClick"
+                prefWidth="80.0" text="Save" visible="false" GridPane.columnIndex="1" GridPane.rowIndex="10">
+          <GridPane.margin>
+            <Insets left="20.0"/>
+          </GridPane.margin>
+        </Button>
+        <Button fx:id="editButton" maxWidth="80.0" minWidth="80.0" mnemonicParsing="false" onAction="#onEditClick"
+                prefWidth="80.0" text="Edit" GridPane.columnIndex="1" GridPane.rowIndex="10">
+          <GridPane.margin>
+            <Insets left="20.0"/>
+          </GridPane.margin>
+        </Button>
+      </children>
+      <BorderPane.margin>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
+      </BorderPane.margin>
+      <opaqueInsets>
+        <Insets/>
+      </opaqueInsets>
+    </GridPane>
+  </right>
+  <bottom>
+    <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <buttons>
+        <Label fx:id="refreshTime" prefWidth="500.0" text="Refreshed at: 01.01.2022. 15:45:00">
+          <opaqueInsets>
+            <Insets left="2000.0"/>
+          </opaqueInsets>
+          <font>
+            <Font size="10.0"/>
+          </font>
+        </Label>
+        <Button fx:id="refreshButton" maxWidth="50.0" minWidth="50.0" mnemonicParsing="false" onAction="#onRefreshClick"
+                prefWidth="50.0" text="Refresh"/>
+      </buttons>
+      <opaqueInsets>
+        <Insets/>
+      </opaqueInsets>
+      <BorderPane.margin>
+        <Insets right="290.0"/>
+      </BorderPane.margin>
+    </ButtonBar>
+  </bottom>
 </BorderPane>

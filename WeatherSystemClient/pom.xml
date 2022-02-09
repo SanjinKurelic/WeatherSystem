@@ -9,13 +9,24 @@
   <version>1.0-SNAPSHOT</version>
   <name>WeatherSystemClient</name>
 
+  <repositories>
+    <repository>
+      <id>rapa</id>
+      <url>https://github.com/harikrishnan83/maven-repository/raw/master/</url>
+    </repository>
+  </repositories>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <junit.version>5.8.1</junit.version>
     <javafx.version>17.0.1</javafx.version>
+    <lombok.version>1.18.22</lombok.version>
+    <spring.version>5.3.15</spring.version>
+    <slf.version>1.7.35</slf.version>
   </properties>
 
   <dependencies>
+    <!-- JavaFX -->
     <dependency>
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
@@ -27,6 +38,27 @@
       <version>${javafx.version}</version>
     </dependency>
 
+    <!-- REST Client -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>${spring.version}</version>
+    </dependency>
+
+    <!-- Utils -->
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>${slf.version}</version>
+    </dependency>
+
+
+    <!-- Test -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
