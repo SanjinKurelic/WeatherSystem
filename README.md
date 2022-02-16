@@ -30,7 +30,7 @@ ActiveMQ is used as a connection through which the backend server sends weather 
 
 Start ActiveMQ with default settings (port = 8161). Spring Boot server (when started) will automatically send MQ messages, as shown on image below.
 
-![](https://github.com/SanjinKurelic/WeatherSystem/blob/master/images/mqWeatherReport.png)
+<p align="center"><img src="https://github.com/SanjinKurelic/WeatherSystem/blob/main/images/mqWeatherReport.png"/></p>
 
 No extra settings are required - MQ queue will be automatically crated.
 
@@ -56,19 +56,19 @@ Open Mule Anypoint Studio and import project from `WeatherSystemESB` directory. 
 
 Flow which define connection between client application and backend service. All requests from the client go through ESB and are redirected to the server. The server will respond in HAL JSON, which will then be transformed to basic JSON (in ESB) for easily integration. All requests are logged by Logger flow. In flow there is also "choice" component which implements routing operations.
 
-![](https://github.com/SanjinKurelic/WeatherSystem/blob/master/images/muleStationAPI.png)
+<p align="center"><img src="https://github.com/SanjinKurelic/WeatherSystem/blob/main/images/muleStationAPI.png"/></p>
 
 ##### MQ flow
 
 MQ flow consist of listener for the new MQ messages, transformer which transform message to more readable format and call to Logger flow which will log output of MQ message.
 
-![](https://github.com/SanjinKurelic/WeatherSystem/blob/master/images/muleMq.png)
+<p align="center"><img src="https://github.com/SanjinKurelic/WeatherSystem/blob/main/images/muleMq.png"/></p>
 
 ##### Logger flow
 
 Flow responsible for logging the actions. All actions are saved in `log.txt` file.
 
-![](https://github.com/SanjinKurelic/WeatherSystem/blob/master/images/muleAPILogger.png)
+<p align="center"><img src="https://github.com/SanjinKurelic/WeatherSystem/blob/main/images/muleAPILogger.png"/></p>
 
 #### JavaFX client
 
@@ -82,17 +82,17 @@ mvn clean javafx:run
 
 If the above command does not work, the application could be started using Java IDE (ex. IntelliJ IDEA). There are some known issues when running the application without IDE.
 
-![](https://github.com/SanjinKurelic/WeatherSystem/blob/master/images/clientApp.png)
+<p align="center"><img src="https://github.com/SanjinKurelic/WeatherSystem/blob/main/images/clientApp.png"/></p>
 
 ## Business process diagrams
 
 Image below show one of business process for using this system. Diagrams are created and executed in jBPM. 
 
-![](https://github.com/SanjinKurelic/WeatherSystem/blob/master/images/jbmpDiagram.png)
+<p align="center"><img src="https://github.com/SanjinKurelic/WeatherSystem/blob/main/images/jbmpDiagram.png"/></p>
 
 jBPM (Java Business Process Model) is an open-source workflow engine written in Java that can execute business processes described in BPMN 2.0.
 
-![](https://github.com/SanjinKurelic/WeatherSystem/blob/master/images/jbpmProject.png)
+<p align="center"><img src="https://github.com/SanjinKurelic/WeatherSystem/blob/main/images/jbpmProject.png"/></p>
 
 ## Dependencies
 
