@@ -1,4 +1,4 @@
-# WeatherSystem
+# Weather System
 
 Weather system is a set of services which allows a user to manage weather stations and weather reports. User can  list, create, update or remove weather stations using desktop application. She or he can also check log files to read current weather report on the weather station. Fetching weather report is done through scheduler service developed on backend server. Integration and logging is done thought MQ server and enterprise service bus. An enterprise service bus (ESB) implements a communication system between mutually interacting software applications in a service-oriented architecture (SOA). It represents a software architecture for distributed computing<sup>[1]</sup>. Whole system is consisted from three main parts:
 
@@ -14,8 +14,8 @@ To be able to run the project successfully, several technologies and programs ar
 
 For running the project, you need to have the following items:
 
-- ActiveMQ running on default port (8161)
-- installed Mule ESB Anypoint Studio
+- ActiveMQ
+- Mule ESB Anypoint Studio
 - Java/JDK 17
 
 Maven is included as Maven wrapper inside `WeatherSystemServer` directory.
@@ -26,37 +26,41 @@ This project require that every component of a project is running.
 
 #### Active MQ
 
-ActiveMQ is used as a connection through which the backend server sends weather report to ESB. This is usually the case with older IOT systems, which can only communicate through a messaging system. ESB listens to every new weather report message and store them to log files.
+ActiveMQ is used as a connection through which the backend server sends weather report to ESB. This is usually the case with older IOT systems, which can only communicate through a messaging system. ESB listens to every new weather report message and store them to the log files.
 
 Start ActiveMQ with default settings (port = 8161). Spring Boot server (when started) will automatically send MQ messages, as shown on image below.
 
 ![](https://github.com/SanjinKurelic/WeatherSystem/blob/master/images/mqWeatherReport.png)
 
-No extra settings are needed, MQ queue will be automatically crated.
+No extra settings are required - MQ queue will be automatically crated.
 
 #### Spring boot backend
 
-Open `WeatherSystemServer` directory and run following command to start the server:
+Open `WeatherSystemServer` directory and run the following command to start the server:
 
 ```
 ./mvnw spring-boot:run
 ```
 
-Java 17 is required for sucessfully running above command. Maven wrapper which is included in project will automatically fetch all needed dependencies ans it'll start server at port 8085. By importing `WeatherSystem.postman_collection.json` file to Postman, server API and status could be easily tested. All CRUD responses from server will be in HAL JSON format.
+Note, Java 17 is required for successfully running the above command. Maven wrapper which is included in the project will automatically fetch all required dependencies, and it'll start the server at port 8085. 
+
+Server will expose CRUD REST API for managing weather stations. Those operations and statuses could be easily tested with Postman by importing `WeatherSystem.postman_collection.json` file as Postman collection. All CRUD operations from the server will be in HAL JSON format.
+
+The server will also generate weather reports using scheduler every 20 seconds, and send them to MQ using JMS.
 
 #### Mule ESB
 
-Open Mule Anypoint Studio and import project from `WeatherSystemESB` directory. ESB is main glue for connecting all systems to work together. Flows are separated to three different logical units described in following paragraphs.
+Open Mule Anypoint Studio and import project from `WeatherSystemESB` directory. ESB is the main glue for connecting all systems to work together. Flows are separated to three different semantic units described in following paragraphs.
 
 ##### Station API flow
 
-Flow which define connection Client <-> Backend. All requests from client go through ESB and are redirected to server. Server will response in HAL JSON which will then be transformed to basic JSON for easily integration. All requests are logged by Logger flow.
+Flow which define connection between client application and backend service. All requests from the client go through ESB and are redirected to the server. The server will respond in HAL JSON, which will then be transformed to basic JSON (in ESB) for easily integration. All requests are logged by Logger flow. In flow there is also "choice" component which implements routing operations.
 
 ![](https://github.com/SanjinKurelic/WeatherSystem/blob/master/images/muleStationAPI.png)
 
 ##### MQ flow
 
-MQ flow consist of listener for new MQ messages, transformer which transform message to more readable format and call to Logger flow which will log output of MQ message.
+MQ flow consist of listener for the new MQ messages, transformer which transform message to more readable format and call to Logger flow which will log output of MQ message.
 
 ![](https://github.com/SanjinKurelic/WeatherSystem/blob/master/images/muleMq.png)
 
@@ -68,20 +72,21 @@ Flow responsible for logging the actions. All actions are saved in `log.txt` fil
 
 #### JavaFX client
 
-Client application is responsable for getting, adding, updating and removing weather stations. Fronted is written using Java FX library. 
-Open `WeatherSystemClient` directory and run following command to start the application:
+Client application is responsible for managing weather stations. User can list, add, edit or remove weather station. Fronted is written using Java FX library.
+
+Open `WeatherSystemClient` directory and run the following command to start the application:
 
 ```
 mvn clean javafx:run
 ```
 
-If above command does not work, application could be started using Java IDE (ex. Intellij IDEA). There are some known issues when running without IDE.
+If the above command does not work, the application could be started using Java IDE (ex. IntelliJ IDEA). There are some known issues when running the application without IDE.
 
 ![](https://github.com/SanjinKurelic/WeatherSystem/blob/master/images/clientApp.png)
 
-### Business process diagrams
+## Business process diagrams
 
-Image below show one bussines process for using this system. Diagrams are created and executed in jBPM.
+Image below show one of business process for using this system. Diagrams are created and executed in jBPM. 
 
 ![](https://github.com/SanjinKurelic/WeatherSystem/blob/master/images/jbmpDiagram.png)
 
