@@ -111,10 +111,6 @@ Several technologies were used while developing this system:
 - H2
 - Lombok
 
-## References
-
-<sup>[1]</sup> https://en.wikipedia.org/wiki/Case-based_reasoning
-
 ## Licence
 
 See the LICENSE file. For every question write to kurelic@sanjin.eu
